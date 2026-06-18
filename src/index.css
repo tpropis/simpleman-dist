@@ -108,6 +108,67 @@
   }
 }
 
+/* --- Cinematic stage (persistent WebGL canvas behind the document) --- */
+.stage-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Lowest-tier fallback: a static graded hero behind the real photo, no WebGL. */
+.static-hero {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(110% 80% at 50% 14%, rgba(193, 122, 63, 0.22), transparent 58%),
+    linear-gradient(180deg, #0d0a07 0%, #14100c 62%, #0d0a07 100%);
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(250%);
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+/* Calm reveal — fade + small rise on mount (re-keyed elements re-animate). */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @layer utilities {
   /* Subtle film-grain texture overlay (pure CSS, no asset needed) */
   .grain::after {

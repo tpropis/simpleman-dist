@@ -42,6 +42,11 @@ export interface BottleProps {
   float?: boolean;
   /** Product type printed on the label, e.g. "Vodka". */
   label?: string;
+  /** Skip the (expensive) transmission shell — for scenes with many bottles or
+   *  low-perf tiers. Uses a cheap glassy standard material instead. */
+  cheap?: boolean;
+  /** Transmission blur samples (perf-tier driven). */
+  samples?: number;
 }
 
 /** Generate a branded label as a CanvasTexture — no external font/asset. */
@@ -104,6 +109,8 @@ export default function Bottle({
   autoRotate = true,
   float = true,
   label,
+  cheap = false,
+  samples = 6,
 }: BottleProps) {
   const group = useRef<THREE.Group>(null);
   const profile = useBottleProfile();
@@ -123,25 +130,36 @@ export default function Bottle({
 
   const body = (
     <group ref={group} position={[0, -0.1, 0]}>
-      {/* Glass shell with real refraction */}
+      {/* Glass shell — refracting transmission, or a cheap glassy fallback */}
       <mesh castShadow>
-        <latheGeometry args={[profile, 64]} />
-        <MeshTransmissionMaterial
-          transmission={1}
-          thickness={0.9}
-          roughness={0.06}
-          ior={1.45}
-          chromaticAberration={0.04}
-          anisotropicBlur={0.2}
-          distortion={0.1}
-          distortionScale={0.2}
-          temporalDistortion={0}
-          color="#f1e7d4"
-          attenuationColor={liquid}
-          attenuationDistance={2.2}
-          samples={6}
-          resolution={512}
-        />
+        <latheGeometry args={[profile, cheap ? 40 : 64]} />
+        {cheap ? (
+          <meshStandardMaterial
+            color="#e9e0cf"
+            transparent
+            opacity={0.42}
+            metalness={0.4}
+            roughness={0.18}
+            envMapIntensity={1.2}
+          />
+        ) : (
+          <MeshTransmissionMaterial
+            transmission={1}
+            thickness={0.9}
+            roughness={0.06}
+            ior={1.45}
+            chromaticAberration={0.04}
+            anisotropicBlur={0.2}
+            distortion={0.1}
+            distortionScale={0.2}
+            temporalDistortion={0}
+            color="#f1e7d4"
+            attenuationColor={liquid}
+            attenuationDistance={2.2}
+            samples={samples}
+            resolution={512}
+          />
+        )}
       </mesh>
 
       {/* Liquid */}
