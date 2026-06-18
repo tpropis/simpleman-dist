@@ -6,7 +6,6 @@ import SectionHeading from "../components/SectionHeading";
 import AnimatedSection from "../components/AnimatedSection";
 import PremiumButton from "../components/PremiumButton";
 import SpiritCard from "../components/SpiritCard";
-import FieldToGlassTimeline from "../components/FieldToGlassTimeline";
 import PickYourPour from "../components/PickYourPour";
 import EventCard from "../components/EventCard";
 import PressStrip from "../components/PressStrip";
@@ -18,6 +17,7 @@ import { SPIRITS } from "../data/spirits";
 // Code-split the entire WebGL stack so it loads only with the hero and never
 // ships on other routes.
 const Hero3D = lazy(() => import("../components/Hero3D"));
+const ScrollStory = lazy(() => import("../components/ScrollStory"));
 import { EVENT_TYPES } from "../data/events";
 
 const BAR_CARDS = [
@@ -139,23 +139,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4 — FIELD TO GLASS */}
-      <section className="section grain relative overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_0%,rgba(193,122,63,0.12),transparent_70%)]"
-        />
-        <div className="container-tight relative">
-          <SectionHeading
-            align="center"
-            eyebrow="Field → Harvest → Still → Glass"
-            title="Follow a Georgia peach into your glass"
-            intro="Every pour has a path. Here's the one ours takes — from the orchard to the bar."
-            className="mx-auto"
-          />
-          <FieldToGlassTimeline />
-        </div>
-      </section>
+      {/* 4 — FIELD → STILL → GLASS (scroll-driven 3D story) */}
+      <Suspense fallback={<div className="min-h-[60vh] bg-charcoal-900" />}>
+        <ScrollStory />
+      </Suspense>
 
       {/* 5 — BAR / COCKTAILS */}
       <section className="relative overflow-hidden">

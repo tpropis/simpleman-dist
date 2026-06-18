@@ -1,11 +1,15 @@
+import { Suspense, lazy } from "react";
 import Seo from "../components/Seo";
 import CinematicHero from "../components/CinematicHero";
+import SectionHeading from "../components/SectionHeading";
 import AnimatedSection from "../components/AnimatedSection";
 import SpiritCard from "../components/SpiritCard";
 import BottleArt from "../components/BottleArt";
 import PremiumButton from "../components/PremiumButton";
 import CtaBanner from "../components/CtaBanner";
 import { SPIRITS } from "../data/spirits";
+
+const ProductViewer = lazy(() => import("../components/ProductViewer"));
 
 export default function Spirits() {
   return (
@@ -28,6 +32,30 @@ export default function Spirits() {
         fallbackClassName="bg-gradient-to-br from-[#3a2412] via-charcoal-800 to-charcoal-900"
         align="left"
       />
+
+      {/* Interactive 3D viewer */}
+      <section className="section grain relative overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_0%,rgba(193,122,63,0.12),transparent_70%)]"
+        />
+        <div className="container-tight relative">
+          <SectionHeading
+            align="center"
+            eyebrow="Take it for a spin"
+            title="Meet the bottles"
+            intro="Pick a spirit and drag to turn it in your hand. Every label starts on a Georgia farm."
+            className="mx-auto"
+          />
+          <div className="mt-12">
+            <Suspense
+              fallback={<div className="min-h-[24rem]" aria-hidden />}
+            >
+              <ProductViewer />
+            </Suspense>
+          </div>
+        </div>
+      </section>
 
       {/* Card grid */}
       <section className="section">

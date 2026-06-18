@@ -1,32 +1,9 @@
-import { Component, Suspense, lazy, useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useReducedMotion } from "framer-motion";
+import { GLBoundary, webglAvailable } from "../three/glSupport";
 
 const HeroScene = lazy(() => import("../three/HeroScene"));
-
-function webglAvailable() {
-  try {
-    const c = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (c.getContext("webgl") || c.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
-
-/** Hides the 3D layer if the GL context ever throws, leaving the CSS fallback. */
-class GLBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
 
 /**
  * Cinematic WebGL hero background. Renders a refracting 3D bottle scene; falls
