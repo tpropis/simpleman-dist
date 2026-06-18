@@ -5,16 +5,10 @@
 @layer base {
   :root {
     color-scheme: dark;
-  }
-
-  html {
-    scroll-behavior: smooth;
+    --gradient-ember: linear-gradient(135deg, #c17a3f 0%, #e8c074 100%);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
     *,
     *::before,
     *::after {
@@ -25,162 +19,97 @@
   }
 
   body {
-    @apply bg-charcoal-900 text-cream font-sans antialiased;
+    @apply bg-background text-foreground font-body antialiased;
     margin: 0;
     overflow-x: hidden;
-    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5 {
     @apply font-display;
+    letter-spacing: -0.01em;
+    font-weight: 600;
     text-wrap: balance;
   }
 
   ::selection {
-    background: rgba(216, 153, 90, 0.3);
+    background: rgba(193, 122, 63, 0.35);
     color: #fff;
   }
 
-  /* Visible focus states for keyboard users */
   :focus-visible {
-    outline: 2px solid theme("colors.gold.light");
+    outline: 2px solid #e8c074;
     outline-offset: 3px;
-    border-radius: 2px;
   }
 
   ::-webkit-scrollbar {
-    width: 11px;
+    width: 9px;
   }
   ::-webkit-scrollbar-track {
     background: #0d0a07;
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(#8c5126, #c17a3f);
-    border-radius: 999px;
-    border: 2px solid #0d0a07;
+    background: #352a1f;
+    border-radius: 4px;
   }
 }
 
 @layer components {
-  /* Smoky glass surface used across cards and panels */
-  .glass {
-    background: linear-gradient(
-      160deg,
-      rgba(39, 32, 25, 0.72) 0%,
-      rgba(20, 16, 12, 0.78) 100%
-    );
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(216, 153, 90, 0.16);
-  }
-
   .eyebrow {
-    @apply font-sans text-xs uppercase tracking-widest2 text-copper-light;
+    @apply font-body uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #d8a24a;
   }
 
-  /* Whiskey-gold gradient text for emphasis words */
-  .text-gradient-gold {
-    background: linear-gradient(120deg, #e8c074 0%, #c17a3f 50%, #e8c074 100%);
+  .gradient-ember {
+    background: var(--gradient-ember);
+  }
+
+  .text-gradient-ember {
+    background: var(--gradient-ember);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    display: inline-block;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
-  .hairline {
+  .divider-ornament {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #d8a24a;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: "";
+    width: 2.5rem;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(216, 153, 90, 0.5),
-      transparent
-    );
+    background: currentColor;
+    opacity: 0.6;
   }
 
-  /* Reusable section vertical rhythm */
   .section {
-    @apply relative px-5 py-24 sm:px-8 md:py-32;
+    @apply relative px-5 py-24 sm:px-8 md:py-28;
   }
 
   .container-tight {
-    @apply mx-auto w-full max-w-6xl;
-  }
-}
-
-/* --- Cinematic stage (persistent WebGL canvas behind the document) --- */
-.stage-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Lowest-tier fallback: a static graded hero behind the real photo, no WebGL. */
-.static-hero {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(110% 80% at 50% 14%, rgba(193, 122, 63, 0.22), transparent 58%),
-    linear-gradient(180deg, #0d0a07 0%, #14100c 62%, #0d0a07 100%);
-}
-
-@keyframes scrollLine {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(250%);
-  }
-}
-
-@keyframes floatY {
-  0%,
-  100% {
-    transform: translateY(-5px);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
-
-/* Calm reveal — fade + small rise on mount (re-keyed elements re-animate). */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.75s ease,
-    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
-  will-change: opacity, transform;
-}
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
-@layer utilities {
-  /* Subtle film-grain texture overlay (pure CSS, no asset needed) */
-  .grain::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  .text-shadow-deep {
-    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.7);
+    @apply mx-auto w-full max-w-7xl;
   }
 }

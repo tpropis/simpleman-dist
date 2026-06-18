@@ -1,25 +1,20 @@
-// Spirit lineup. Descriptions focus on flavor, ingredients, craft, origin, and
-// process only — no health, mood, status, ABV, pricing, or award claims.
-// Sourcing facts (Dickey Farms peaches, Penland Farms apples, "first vodka made
-// from peaches", Georgia Grown designation) are drawn from public reporting.
+// Spirit lineup. Copy mirrors the brand's own factual descriptions (farms,
+// process) — no invented ABV, pricing, or awards. Sourcing facts are drawn from
+// the brand's published material.
 
 export interface Spirit {
   slug: string;
   name: string;
   category: string;
-  // Short, punchy line for cards.
   tagline: string;
-  // Longer premium description.
   description: string;
   tastingNotes: string[];
   ingredients: string[];
   source: string;
   cocktail: { name: string; note: string };
   badges: string[];
-  // Liquid color for the generated SVG bottle art.
   liquid: string;
   accent: string;
-  // Optional real photo — drop a file at this path and it replaces the art.
   image: string;
 }
 
@@ -28,17 +23,17 @@ export const SPIRITS: Spirit[] = [
     slug: "peach-grain-vodka",
     name: "Vodka from Peaches & Grains",
     category: "Vodka",
-    tagline: "Over fifty Georgia peaches in every bottle.",
+    tagline: "Georgia peaches and wheat, distilled twelve times.",
     description:
-      "Distilled from Georgia produce and grain — not flavored with syrup or additives. Each bottle carries more than fifty peaches grown at Dickey Farms in Musella, leaving the faintest nose and finish of fresh fruit in a clean, dry pour. Bright, smooth, and built for crisp cocktails or easy sipping over a single rock.",
-    tastingNotes: ["Faint fresh peach", "Clean grain", "Dry, soft finish"],
-    ingredients: ["Georgia peaches", "Georgia grain"],
+      "Over twenty-two Dickey Farms peaches go into every bottle, mellowed with wheat and distilled twelve times. Not flavored — built from the fruit itself. Bright, clean, and seasonal, made for crisp cocktails and easy sipping.",
+    tastingNotes: ["Faint fresh peach", "Clean wheat", "Dry, soft finish"],
+    ingredients: ["Georgia peaches", "Wheat"],
     source: "Dickey Farms · Musella, GA",
     cocktail: {
       name: "Garden Mule",
       note: "Peach-grain vodka, ginger beer, lime, fresh mint.",
     },
-    badges: ["Georgia ingredients", "Small batch", "Cocktail friendly"],
+    badges: ["Georgia Grown", "Seasonal", "Distilled 12x"],
     liquid: "#eef1ef",
     accent: "#e8c074",
     image: "/images/spirits/peach-grain-vodka.jpg",
@@ -47,17 +42,17 @@ export const SPIRITS: Spirit[] = [
     slug: "smoked-apple-brandy",
     name: "Smoked Apple Brandy",
     category: "Brandy",
-    tagline: "Mountain apples, charred oak, slow smoke.",
+    tagline: "Heirloom mountain apples, kissed with applewood smoke.",
     description:
-      "Made with apples grown at Penland Farms in Ellijay and coaxed over a low smoke before resting on oak. Warm and orchard-sweet up front, with a curl of campfire and barrel spice on the back. A spirit for cool evenings, neat or stirred into something brown and bitter.",
-    tastingNotes: ["Baked apple", "Wood smoke", "Oak & spice"],
-    ingredients: ["North Georgia apples", "Charred oak"],
-    source: "Penland Farms · Ellijay, GA",
+      "Heirloom apples from Penland Orchard in Ellijay, smoked with applewood for a soft line of smoke over orchard sweetness. Warm and unhurried — a spirit for cool evenings, neat or stirred into something brown and bitter.",
+    tastingNotes: ["Baked apple", "Applewood smoke", "Oak & spice"],
+    ingredients: ["North Georgia apples", "Applewood smoke"],
+    source: "Penland Orchard · Ellijay, GA",
     cocktail: {
       name: "Orchard Old Fashioned",
       note: "Smoked apple brandy, demerara, aromatic bitters, orange peel.",
     },
-    badges: ["Georgia ingredients", "Barrel-rested", "Small batch"],
+    badges: ["Georgia Grown", "Seasonal", "Smoked"],
     liquid: "#a8551f",
     accent: "#d8995a",
     image: "/images/spirits/smoked-apple-brandy.png",
@@ -66,17 +61,17 @@ export const SPIRITS: Spirit[] = [
     slug: "gullah-geechee-gin",
     name: "Gullah Geechee Gin",
     category: "Gin",
-    tagline: "Coastal botanicals with Lowcountry soul.",
+    tagline: "Organic botanicals with Lowcountry soul.",
     description:
-      "A gin rooted in the botanicals and foodways of the Gullah Geechee coast — juniper led, but layered with garden herbs and warm spice. Bright and aromatic, it lifts a martini and stands tall in a Negroni without losing its Southern accent.",
+      "Organic botanicals from Gilliard Farms in Gullah-Geechee country make a gin that's lush, fragrant, and juniper-forward. Bright and aromatic, it lifts a martini and stands tall in a Negroni without losing its Southern accent.",
     tastingNotes: ["Juniper", "Garden herbs", "Warm spice"],
-    ingredients: ["Juniper", "Georgia botanicals"],
-    source: "Botanicals grown & gathered in Georgia",
+    ingredients: ["Juniper", "Organic Georgia botanicals"],
+    source: "Gilliard Farms · Brunswick, GA",
     cocktail: {
       name: "Lowcountry Negroni",
       note: "Gullah Geechee gin, sweet vermouth, bitter aperitivo, orange.",
     },
-    badges: ["Botanical", "Small batch", "Cocktail friendly"],
+    badges: ["Georgia Grown", "Organic", "Seasonal"],
     liquid: "#dfe7d6",
     accent: "#bcd08f",
     image: "/images/spirits/gullah-geechee-gin.jpg",
@@ -85,22 +80,21 @@ export const SPIRITS: Spirit[] = [
     slug: "amaro-georgiano",
     name: "Amaro Georgiano",
     category: "Amaro",
-    tagline: "A Georgia answer to the Italian digestivo.",
+    tagline: "An Italian-style digestivo, grown in Georgia.",
     description:
-      "Our bittersweet amaro, built from botanicals planted and gathered across Georgia. Layers of root, bark, citrus peel, and dark herbs settle into a long, gentle bitterness. Pour it neat after dinner, over ice with an orange twist, or splashed into a stirred cocktail.",
+      "An Italian-style digestivo built from Georgia-grown roots, flowers, and botanicals. Layers of bittersweet bark, dark herbs, and citrus peel settle into a long, gentle finish. Pour it neat after dinner, over ice with an orange twist, or into a stirred cocktail.",
     tastingNotes: ["Bittersweet root", "Dark herbs", "Citrus peel"],
-    ingredients: ["Georgia botanicals", "Citrus", "Roots & barks"],
+    ingredients: ["Georgia botanicals", "Roots & flowers", "Citrus"],
     source: "Botanicals grown in Georgia",
     cocktail: {
       name: "Georgiano Spritz",
       note: "Amaro Georgiano, sparkling wine, soda, orange wheel.",
     },
-    badges: ["Botanical", "After-dinner", "Limited release"],
+    badges: ["Georgia Grown", "Small Batch", "Digestivo"],
     liquid: "#5e1f12",
     accent: "#c17a3f",
     image: "/images/spirits/amaro-georgiano.jpg",
   },
 ];
 
-export const getSpirit = (slug: string) =>
-  SPIRITS.find((s) => s.slug === slug);
+export const getSpirit = (slug: string) => SPIRITS.find((s) => s.slug === slug);
