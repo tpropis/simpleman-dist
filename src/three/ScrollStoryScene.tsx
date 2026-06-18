@@ -155,7 +155,7 @@ export default function ScrollStoryScene({ progress, reduced = false }: Props) {
       <group position={[0, 0.1, 0]}>
         <group ref={bottleGroup}>
           {/* Rotation is driven by scroll; idle float still allowed. */}
-          <Bottle reduced={reduced} autoRotate={false} float={!reduced} liquid="#d8a24a" />
+          <Bottle reduced={reduced} autoRotate={false} float={!reduced} liquid="#d8a24a" label="Georgia" />
         </group>
       </group>
 

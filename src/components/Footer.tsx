@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { NAV, FOOTER_NAV } from "../data/nav";
 import { SITE } from "../data/site";
+import Logo from "./Logo";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -10,10 +11,8 @@ export default function Footer() {
       <div className="container-tight relative px-5 py-16 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
-            <p className="font-display text-2xl font-bold">
-              <span className="text-gradient-gold">Simple Man</span> Distillery
-            </p>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-cream-dim">
+            <Logo variant="full" className="h-14" title="Simple Man Distillery" />
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream-dim">
               Georgia farm-to-glass craft spirits, Southern food, and a speakeasy
               cocktail bar at {SITE.location.venue}. Made by neighbors, poured for
               neighbors.

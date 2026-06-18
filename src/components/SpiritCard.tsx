@@ -79,6 +79,7 @@ export default function SpiritCard({ spirit }: Props) {
             liquid={spirit.liquid}
             accent={spirit.accent}
             label={spirit.name}
+            category={spirit.category}
             className="mx-auto h-full w-auto"
           />
         )}

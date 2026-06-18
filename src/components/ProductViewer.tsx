@@ -41,6 +41,7 @@ export default function ProductViewer() {
                     liquid={spirit.liquid}
                     accent={spirit.accent}
                     label={spirit.name}
+                    category={spirit.category}
                     className="h-full w-auto"
                   />
                 </div>
@@ -53,7 +54,11 @@ export default function ProductViewer() {
                   gl={{ antialias: true, alpha: false }}
                   camera={{ position: [0, 0.4, 6], fov: 32 }}
                 >
-                  <ProductScene liquid={spirit.liquid} reduced={reduced} />
+                  <ProductScene
+                    liquid={spirit.liquid}
+                    label={spirit.category}
+                    reduced={reduced}
+                  />
                 </Canvas>
               </Suspense>
             </GLBoundary>
@@ -63,6 +68,7 @@ export default function ProductViewer() {
                 liquid={spirit.liquid}
                 accent={spirit.accent}
                 label={spirit.name}
+                    category={spirit.category}
                 className="h-full w-auto"
               />
             </div>

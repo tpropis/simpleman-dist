@@ -145,6 +145,7 @@ export default function PickYourPour() {
               liquid={result.liquid}
               accent={result.accent}
               label={result.name}
+              category={result.category}
               className="h-full w-auto"
             />
           </div>

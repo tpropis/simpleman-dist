@@ -10,9 +10,11 @@ import Bottle from "./Bottle";
 /** A single, user-rotatable bottle for the product viewer. */
 export default function ProductScene({
   liquid,
+  label,
   reduced = false,
 }: {
   liquid: string;
+  label?: string;
   reduced?: boolean;
 }) {
   return (
@@ -23,7 +25,7 @@ export default function ProductScene({
       <pointLight position={[-4, 1, -3]} intensity={14} color="#6e2230" />
 
       <group position={[0, -0.2, 0]}>
-        <Bottle liquid={liquid} reduced={reduced} autoRotate={false} float={false} />
+        <Bottle liquid={liquid} label={label} reduced={reduced} autoRotate={false} float={false} />
       </group>
 
       <ContactShadows

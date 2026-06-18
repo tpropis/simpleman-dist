@@ -40,6 +40,58 @@ export interface BottleProps {
   autoRotate?: boolean;
   /** Wrap in drei <Float> for a gentle bob. */
   float?: boolean;
+  /** Product type printed on the label, e.g. "Vodka". */
+  label?: string;
+}
+
+/** Generate a branded label as a CanvasTexture — no external font/asset. */
+function makeLabelTexture(category: string): THREE.CanvasTexture | null {
+  try {
+    const w = 1024;
+    const h = 512;
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    if (!ctx) return null;
+    ctx.fillStyle = "#14100c";
+    ctx.fillRect(0, 0, w, h);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.strokeStyle = "rgba(224,168,95,0.35)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(w / 2 - 220, 60, 440, 392);
+
+    ctx.fillStyle = "#e0a85f";
+    ctx.font = '600 46px Inter, system-ui, sans-serif';
+    ctx.fillText("SIMPLE MAN", w / 2, 150);
+
+    ctx.strokeStyle = "#c17a3f";
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 150, 188);
+    ctx.lineTo(w / 2 + 150, 188);
+    ctx.stroke();
+
+    ctx.fillStyle = "#f3e8d6";
+    ctx.font = '700 92px "Playfair Display", Georgia, serif';
+    ctx.fillText(category.toUpperCase(), w / 2, 268);
+
+    ctx.fillStyle = "#cdbfa9";
+    ctx.font = "400 30px Inter, system-ui, sans-serif";
+    ctx.fillText("SMALL BATCH", w / 2, 340);
+    ctx.fillStyle = "#e0a85f";
+    ctx.font = "400 26px Inter, system-ui, sans-serif";
+    ctx.fillText("GEORGIA · EST. 2023", w / 2, 392);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 4;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.needsUpdate = true;
+    return tex;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -51,9 +103,14 @@ export default function Bottle({
   reduced = false,
   autoRotate = true,
   float = true,
+  label,
 }: BottleProps) {
   const group = useRef<THREE.Group>(null);
   const profile = useBottleProfile();
+  const labelMap = useMemo(
+    () => (label ? makeLabelTexture(label) : null),
+    [label]
+  );
 
   useFrame((state) => {
     if (reduced || !autoRotate || !group.current) return;
@@ -118,14 +175,15 @@ export default function Bottle({
 
       {/* Label band */}
       <mesh position={[0, -0.5, 0]}>
-        <cylinderGeometry args={[0.66, 0.66, 0.95, 64, 1, true]} />
+        <cylinderGeometry args={[0.655, 0.655, 0.95, 64, 1, true]} />
         <meshStandardMaterial
-          color="#14100c"
-          roughness={0.7}
+          map={labelMap ?? undefined}
+          color={labelMap ? "#ffffff" : "#14100c"}
+          roughness={0.65}
           metalness={0.1}
           side={THREE.DoubleSide}
-          emissive="#3a2412"
-          emissiveIntensity={0.25}
+          emissive={labelMap ? "#1a140d" : "#3a2412"}
+          emissiveIntensity={0.2}
         />
       </mesh>
       <mesh position={[0, -0.02, 0]}>

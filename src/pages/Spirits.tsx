@@ -89,6 +89,7 @@ export default function Spirits() {
                         liquid={s.liquid}
                         accent={s.accent}
                         label={s.name}
+                        category={s.category}
                         className="relative mx-auto h-full w-auto"
                       />
                     </div>

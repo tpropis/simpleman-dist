@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "../data/site";
 import SmokeOverlay from "./SmokeOverlay";
+import Logo from "./Logo";
 
 const STORAGE_KEY = "smd-age-verified";
 const SAFE_EXIT_URL = "https://www.responsibility.org/";
@@ -67,10 +68,10 @@ export default function AgeGate() {
 
         {!declined ? (
           <>
-            <p className="eyebrow">{SITE.location.venue}</p>
+            <Logo variant="mark" title="" className="mx-auto h-24 w-24" />
             <h1
               id="agegate-title"
-              className="mt-5 font-display text-3xl font-bold sm:text-4xl"
+              className="mt-4 font-display text-3xl font-bold sm:text-4xl"
             >
               <span className="text-gradient-gold">Simple Man</span> Distillery
             </h1>

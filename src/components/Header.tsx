@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV } from "../data/nav";
 import { SITE } from "../data/site";
+import Logo from "./Logo";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,15 +46,10 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8">
         <Link
           to="/"
-          className="flex flex-col leading-none"
+          className="flex items-center"
           aria-label="Simple Man Distillery — home"
         >
-          <span className="font-display text-lg font-bold tracking-wide text-cream sm:text-xl">
-            Simple Man
-          </span>
-          <span className="text-[10px] uppercase tracking-widest2 text-copper-light">
-            Distillery
-          </span>
+          <Logo variant="full" title="" className="h-11 sm:h-12" />
         </Link>
 
         <nav

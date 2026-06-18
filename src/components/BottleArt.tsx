@@ -2,6 +2,8 @@ interface Props {
   liquid: string;
   accent: string;
   label?: string;
+  /** Short product type shown large on the label, e.g. "Vodka". */
+  category?: string;
   className?: string;
 }
 
@@ -14,6 +16,7 @@ export default function BottleArt({
   liquid,
   accent,
   label,
+  category,
   className = "",
 }: Props) {
   const id = (label || liquid).replace(/[^a-z0-9]/gi, "");
@@ -62,22 +65,36 @@ export default function BottleArt({
         strokeOpacity="0.7"
       />
       {/* cap */}
-      <rect x="46" y="20" width="28" height="18" rx="3" fill={accent} opacity="0.9" />
-      {/* label plate */}
+      <rect x="46" y="18" width="28" height="20" rx="3" fill={accent} opacity="0.9" />
+      <rect x="48" y="36" width="24" height="6" rx="2" fill="#8c5126" opacity="0.8" />
+
+      {/* branded label */}
       <rect
-        x="38"
-        y="178"
-        width="44"
-        height="62"
+        x="36"
+        y="172"
+        width="48"
+        height="74"
         rx="3"
         fill="#14100c"
-        opacity="0.55"
+        opacity="0.62"
         stroke={accent}
-        strokeOpacity="0.5"
+        strokeOpacity="0.55"
       />
-      <line x1="46" y1="196" x2="74" y2="196" stroke={accent} strokeOpacity="0.6" />
-      <line x1="48" y1="210" x2="72" y2="210" stroke="#f3e8d6" strokeOpacity="0.25" />
-      <line x1="50" y1="220" x2="70" y2="220" stroke="#f3e8d6" strokeOpacity="0.2" />
+      <rect x="40" y="176" width="40" height="66" rx="2" fill="none" stroke={accent} strokeOpacity="0.25" />
+      <text x="60" y="190" textAnchor="middle" fill={accent} fontFamily='"Inter", sans-serif' fontSize="6.5" fontWeight="600" letterSpacing="1.6">
+        SIMPLE MAN
+      </text>
+      <line x1="46" y1="195" x2="74" y2="195" stroke={accent} strokeOpacity="0.5" />
+      <text x="60" y="214" textAnchor="middle" fill="#f3e8d6" fontFamily='"Playfair Display", Georgia, serif' fontSize="13" fontWeight="700">
+        {(category || "Spirit").toUpperCase()}
+      </text>
+      <text x="60" y="230" textAnchor="middle" fill="#cdbfa9" fontFamily='"Inter", sans-serif' fontSize="5" letterSpacing="1.4">
+        SMALL BATCH
+      </text>
+      <text x="60" y="238" textAnchor="middle" fill={accent} fontFamily='"Inter", sans-serif' fontSize="4.5" letterSpacing="2">
+        GEORGIA · EST. 2023
+      </text>
+
       {/* highlight streak */}
       <rect x="44" y="100" width="4" height="190" rx="2" fill="#fff" opacity="0.12" />
     </svg>

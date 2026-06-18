@@ -32,7 +32,7 @@ export default function HeroScene({ reduced = false }: { reduced?: boolean }) {
       <pointLight position={[4, -2, 4]} intensity={12} color="#e0a85f" />
 
       <group position={[offsetX, 0.2, 0]}>
-        <Bottle reduced={reduced} liquid="#d8a24a" />
+        <Bottle reduced={reduced} liquid="#d8a24a" label="Vodka" />
       </group>
 
       {!reduced && (
