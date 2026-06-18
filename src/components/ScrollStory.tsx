@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   motion,
+  useInView,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -80,6 +81,7 @@ export default function ScrollStory() {
   const sectionRef = useRef<HTMLElement>(null);
   const progressRef = useRef(0);
 
+  const inView = useInView(sectionRef, { margin: "100px 0px" });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -127,6 +129,7 @@ export default function ScrollStory() {
               className="!absolute inset-0"
               shadows
               dpr={[1, 1.6]}
+              frameloop={inView ? "always" : "never"}
               gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
               camera={{ position: [0, 1.25, 6.6], fov: 32 }}
             >

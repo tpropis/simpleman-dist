@@ -34,8 +34,14 @@ Node 18+ recommended (CI/Netlify pinned to Node 20).
 - **Tailwind CSS 3** — design system + utilities
 - **Framer Motion** — scroll reveals, parallax, staggered entrances (all respect
   `prefers-reduced-motion`)
+- **Three.js / react-three-fiber / drei / postprocessing** — real-time WebGL:
+  a refracting 3D hero bottle, a scroll-driven Field→Still→Glass story with an
+  animated copper still, and a drag-to-rotate product viewer
 
-No heavy or unnecessary dependencies. Final bundle ≈ 112 kB gzipped JS.
+All WebGL is lazy-loaded and code-split, so the core bundle stays ~113 kB gzip
+and routes without 3D ship no three.js. Every scene feature-detects WebGL and
+degrades to a static fallback (gradient / SVG bottle / timeline); render loops
+pause when their canvas scrolls out of view; reduced-motion disables animation.
 
 ---
 

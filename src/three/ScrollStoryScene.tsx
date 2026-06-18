@@ -33,6 +33,78 @@ function sampleVec(vecs: THREE.Vector3[], p: number, out: THREE.Vector3) {
   return out.copy(vecs[i]).lerp(vecs[i + 1], seg - i);
 }
 
+/** Stylised copper pot still that reveals during the "Still" act (p ≈ 0.5). */
+function CopperStill({ progress }: { progress: MutableRefObject<number> }) {
+  const g = useRef<THREE.Group>(null);
+  const neck = useMemo(
+    () =>
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0, 1.18, 0),
+        new THREE.Vector3(0.05, 1.46, 0),
+        new THREE.Vector3(0.32, 1.4, 0),
+        new THREE.Vector3(0.62, 1.05, 0),
+        new THREE.Vector3(0.66, 0.4, 0),
+        new THREE.Vector3(0.66, -0.05, 0),
+      ]),
+    []
+  );
+
+  useFrame(() => {
+    if (!g.current) return;
+    const p = progress.current;
+    // Triangular reveal centred on the Still act.
+    const reveal = Math.max(0, 1 - Math.abs(p - 0.5) / 0.2);
+    const s = THREE.MathUtils.lerp(g.current.scale.x, reveal, 0.12);
+    g.current.scale.setScalar(s);
+    g.current.visible = s > 0.02;
+    g.current.rotation.y += 0.002;
+  });
+
+  const copper = (
+    <meshStandardMaterial color="#c17a3f" metalness={1} roughness={0.32} envMapIntensity={1.1} />
+  );
+
+  return (
+    <group ref={g} position={[-1.85, -0.3, -0.4]} scale={0.001}>
+      {/* base */}
+      <mesh position={[0, -0.02, 0]}>
+        <cylinderGeometry args={[0.52, 0.56, 0.1, 40]} />
+        {copper}
+      </mesh>
+      {/* pot body */}
+      <mesh position={[0, 0.45, 0]} scale={[1, 0.85, 1]}>
+        <sphereGeometry args={[0.46, 40, 32]} />
+        {copper}
+      </mesh>
+      {/* onion head */}
+      <mesh position={[0, 0.98, 0]} scale={[1, 1.15, 1]}>
+        <sphereGeometry args={[0.27, 36, 28]} />
+        {copper}
+      </mesh>
+      {/* swan-neck lyne arm */}
+      <mesh>
+        <tubeGeometry args={[neck, 64, 0.07, 14]} />
+        {copper}
+      </mesh>
+      {/* condenser */}
+      <mesh position={[0.66, 0.45, 0]}>
+        <cylinderGeometry args={[0.12, 0.12, 1.0, 28]} />
+        {copper}
+      </mesh>
+      {/* rising steam */}
+      <Sparkles
+        position={[0.05, 1.7, 0]}
+        count={18}
+        scale={[0.5, 1.1, 0.5]}
+        size={3}
+        speed={0.6}
+        opacity={0.45}
+        color="#f3e8d6"
+      />
+    </group>
+  );
+}
+
 interface Props {
   progress: MutableRefObject<number>;
   reduced?: boolean;
@@ -86,6 +158,8 @@ export default function ScrollStoryScene({ progress, reduced = false }: Props) {
           <Bottle reduced={reduced} autoRotate={false} float={!reduced} liquid="#d8a24a" />
         </group>
       </group>
+
+      <CopperStill progress={progress} />
 
       {!reduced && (
         <Sparkles
