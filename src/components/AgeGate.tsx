@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "../data/site";
 import SmokeOverlay from "./SmokeOverlay";
-import Logo from "./Logo";
 
 const STORAGE_KEY = "smd-age-verified";
 const SAFE_EXIT_URL = "https://www.responsibility.org/";
@@ -68,14 +67,19 @@ export default function AgeGate() {
 
         {!declined ? (
           <>
-            <Logo variant="mark" title="" className="mx-auto h-24 w-24" />
-            <h1
-              id="agegate-title"
-              className="mt-4 font-display text-3xl font-bold sm:text-4xl"
-            >
-              <span className="text-gradient-gold">Simple Man</span> Distillery
+            <div className="mx-auto w-32 rounded-2xl bg-cream p-3 shadow-glow sm:w-36">
+              <img
+                src="/images/logo.png"
+                alt="Simple Man Distillery"
+                width={455}
+                height={652}
+                className="w-full"
+              />
+            </div>
+            <h1 id="agegate-title" className="sr-only">
+              Simple Man Distillery
             </h1>
-            <p className="mx-auto mt-4 max-w-sm text-cream-dim">
+            <p className="mx-auto mt-6 max-w-sm text-cream-dim">
               Georgia farm-to-glass spirits and a speakeasy cocktail bar. Before
               you step in, we have to ask —
             </p>

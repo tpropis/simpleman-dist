@@ -60,7 +60,7 @@ export const SPIRITS: Spirit[] = [
     badges: ["Georgia ingredients", "Barrel-rested", "Small batch"],
     liquid: "#a8551f",
     accent: "#d8995a",
-    image: "/images/spirits/smoked-apple-brandy.jpg",
+    image: "/images/spirits/smoked-apple-brandy.png",
   },
   {
     slug: "gullah-geechee-gin",

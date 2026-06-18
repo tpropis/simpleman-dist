@@ -1,21 +1,21 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { GLBoundary, webglAvailable } from "../three/glSupport";
-import BottleArt from "./BottleArt";
 import PremiumButton from "./PremiumButton";
 import { SPIRITS } from "../data/spirits";
 
 const ProductScene = lazy(() => import("../three/ProductScene"));
 
 /**
- * Interactive 3D product viewer. Pick a spirit and drag to rotate a real-time
- * refracting bottle; falls back to the generated SVG bottle art when WebGL is
- * unavailable. The swatch selector works in both modes.
+ * Interactive product showcase. Leads with the real bottle photography and lets
+ * visitors switch spirits via swatches; an optional "Spin in 3D" toggle drops in
+ * a drag-to-rotate real-time bottle (when WebGL is available).
  */
 export default function ProductViewer() {
   const reduced = useReducedMotion() ?? false;
   const [active, setActive] = useState(0);
+  const [mode, setMode] = useState<"photo" | "3d">("photo");
   const [gl, setGl] = useState(false);
 
   useEffect(() => {
@@ -26,25 +26,18 @@ export default function ProductViewer() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-      {/* Viewer */}
+      {/* Stage */}
       <div className="relative">
         <div className="relative aspect-square w-full overflow-hidden rounded-3xl glass">
           <div
             aria-hidden
             className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_40%,rgba(193,122,63,0.22),transparent_70%)]"
           />
-          {gl ? (
+
+          {mode === "3d" && gl ? (
             <GLBoundary
               fallback={
-                <div className="absolute inset-0 flex items-center justify-center p-10">
-                  <BottleArt
-                    liquid={spirit.liquid}
-                    accent={spirit.accent}
-                    label={spirit.name}
-                    category={spirit.category}
-                    className="h-full w-auto"
-                  />
-                </div>
+                <PhotoStage spirit={spirit} reduced={reduced} key="fallback" />
               }
             >
               <Suspense fallback={null}>
@@ -63,26 +56,18 @@ export default function ProductViewer() {
               </Suspense>
             </GLBoundary>
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center p-10">
-              <BottleArt
-                liquid={spirit.liquid}
-                accent={spirit.accent}
-                label={spirit.name}
-                    category={spirit.category}
-                className="h-full w-auto"
-              />
-            </div>
+            <AnimatePresence mode="wait">
+              <PhotoStage spirit={spirit} reduced={reduced} key={spirit.slug} />
+            </AnimatePresence>
           )}
 
-          {gl && (
-            <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-widest2 text-cream-muted">
-              Drag to rotate
-            </p>
-          )}
+          <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-widest2 text-cream-muted">
+            {mode === "3d" ? "Drag to rotate" : "Georgia-made, small batch"}
+          </p>
         </div>
 
-        {/* Swatches */}
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
+        {/* Controls */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
           {SPIRITS.map((s, i) => (
             <button
               key={s.slug}
@@ -102,6 +87,14 @@ export default function ProductViewer() {
               {s.category}
             </button>
           ))}
+          {gl && (
+            <button
+              onClick={() => setMode((m) => (m === "3d" ? "photo" : "3d"))}
+              className="rounded-full border border-copper/40 px-4 py-2 text-xs uppercase tracking-widest2 text-gold-light transition-colors hover:border-gold-light"
+            >
+              {mode === "3d" ? "View Photo" : "Spin in 3D"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -139,5 +132,27 @@ export default function ProductViewer() {
         </div>
       </div>
     </div>
+  );
+}
+
+function PhotoStage({
+  spirit,
+  reduced,
+}: {
+  spirit: (typeof SPIRITS)[number];
+  reduced: boolean;
+}) {
+  return (
+    <motion.img
+      src={spirit.image}
+      alt={`${spirit.name} bottle`}
+      loading="lazy"
+      decoding="async"
+      initial={reduced ? false : { opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={reduced ? undefined : { opacity: 0, scale: 1.02 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+      className="absolute inset-0 h-full w-full object-contain p-8 drop-shadow-[0_30px_40px_rgba(0,0,0,0.55)]"
+    />
   );
 }

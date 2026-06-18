@@ -45,6 +45,7 @@ export default function Home() {
           </>
         }
         subtitle="Small-batch spirits, Southern food, and a cocktail bar built around real Georgia ingredients."
+        image="/images/hero/distillery.jpg"
         scene={
           <Suspense fallback={null}>
             <Hero3D />

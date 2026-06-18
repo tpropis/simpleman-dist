@@ -4,7 +4,6 @@ import CinematicHero from "../components/CinematicHero";
 import SectionHeading from "../components/SectionHeading";
 import AnimatedSection from "../components/AnimatedSection";
 import SpiritCard from "../components/SpiritCard";
-import BottleArt from "../components/BottleArt";
 import PremiumButton from "../components/PremiumButton";
 import CtaBanner from "../components/CtaBanner";
 import { SPIRITS } from "../data/spirits";
@@ -80,17 +79,17 @@ export default function Spirits() {
                   className="grid scroll-mt-28 gap-8 md:grid-cols-2 md:items-center"
                 >
                   <div className={flip ? "md:order-2" : ""}>
-                    <div className="relative mx-auto h-72 w-full max-w-xs">
+                    <div className="relative mx-auto h-80 w-full max-w-sm">
                       <div
                         aria-hidden
-                        className="absolute inset-0 rounded-full bg-copper/15 blur-3xl"
+                        className="absolute inset-0 rounded-[40%] bg-copper/15 blur-3xl"
                       />
-                      <BottleArt
-                        liquid={s.liquid}
-                        accent={s.accent}
-                        label={s.name}
-                        category={s.category}
-                        className="relative mx-auto h-full w-auto"
+                      <img
+                        src={s.image}
+                        alt={`${s.name} bottle`}
+                        loading="lazy"
+                        decoding="async"
+                        className="relative mx-auto h-full w-full rounded-2xl object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)]"
                       />
                     </div>
                   </div>

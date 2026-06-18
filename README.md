@@ -84,14 +84,16 @@ public/
 
 ---
 
-## Media: drop-in photos & video
+## Media
 
-The site is **fully designed without any photography** — it uses CSS gradients,
-generated SVG bottle art, film grain, smoke, and copper-glow lighting so it looks
-premium out of the box.
+Real brand photography is included in `public/images/` — the logo, the copper
+still, cocktail and farm shots, event space, and all four product bottles
+(vodka, smoked apple brandy, Gullah Geechee gin, Amaro Georgiano), sourced from
+the brand's asset repo. Generated SVG/3D bottle art remains as an automatic
+fallback if any image is missing.
 
-To upgrade to real media, just **drop files into `public/images/...` or
-`public/videos/...` using the documented filenames** — no code changes needed:
+Video slots (`public/videos/...`) are still placeholders — drop real `.mp4`/
+`.webm` files in using the documented filenames and they appear automatically:
 
 - Every `<img>` has an `onError` fallback to the cinematic art.
 - `MediaBackground` renders a `<video>` only if the file exists; otherwise the

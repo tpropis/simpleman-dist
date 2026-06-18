@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { SPIRITS, getSpirit } from "../data/spirits";
-import BottleArt from "./BottleArt";
 
 type Slug = (typeof SPIRITS)[number]["slug"];
 
@@ -140,13 +139,13 @@ export default function PickYourPour() {
 
       {result && (
         <div className="grid gap-6 sm:grid-cols-[160px_1fr] sm:items-center">
-          <div className="mx-auto h-48 w-auto sm:mx-0">
-            <BottleArt
-              liquid={result.liquid}
-              accent={result.accent}
-              label={result.name}
-              category={result.category}
-              className="h-full w-auto"
+          <div className="mx-auto h-52 w-full sm:mx-0">
+            <img
+              src={result.image}
+              alt={`${result.name} bottle`}
+              loading="lazy"
+              decoding="async"
+              className="mx-auto h-full w-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
             />
           </div>
           <div>
