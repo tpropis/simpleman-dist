@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import CinematicHero from "../components/CinematicHero";
@@ -13,6 +14,10 @@ import CtaBanner from "../components/CtaBanner";
 import MediaBackground from "../components/MediaBackground";
 import SmokeOverlay from "../components/SmokeOverlay";
 import { SPIRITS } from "../data/spirits";
+
+// Code-split the entire WebGL stack so it loads only with the hero and never
+// ships on other routes.
+const Hero3D = lazy(() => import("../components/Hero3D"));
 import { EVENT_TYPES } from "../data/events";
 
 const BAR_CARDS = [
@@ -30,8 +35,9 @@ export default function Home() {
         description="Simple Man Distillery — small-batch Georgia spirits, Southern food, and a speakeasy cocktail bar at Cumming City Center. Vodka from peaches and grains, smoked apple brandy, Gullah Geechee gin, Amaro Georgiano. Must be 21+."
       />
 
-      {/* 1 — HERO */}
+      {/* 1 — HERO (real-time 3D bottle) */}
       <CinematicHero
+        align="left"
         eyebrow="Cumming City Center · Must be 21+"
         title={
           <>
@@ -39,11 +45,14 @@ export default function Home() {
           </>
         }
         subtitle="Small-batch spirits, Southern food, and a cocktail bar built around real Georgia ingredients."
-        video="/videos/copper-still.mp4"
-        image="/images/hero/distillery.jpg"
-        fallbackClassName="bg-gradient-to-b from-[#3a2412] via-charcoal-800 to-charcoal-900"
+        scene={
+          <Suspense fallback={null}>
+            <Hero3D />
+          </Suspense>
+        }
+        fallbackClassName="bg-gradient-to-br from-[#3a2412] via-charcoal-800 to-charcoal-900"
       >
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap gap-3">
           <PremiumButton to="/spirits">Explore Spirits</PremiumButton>
           <PremiumButton to="/bar" variant="outline">
             Visit the Bar

@@ -12,6 +12,8 @@ interface Props {
   image?: string;
   fallbackClassName?: string;
   children?: ReactNode;
+  /** Optional live background (e.g. a WebGL Canvas) layered over the media. */
+  scene?: ReactNode;
   /** Full-screen homepage hero vs. shorter page header. */
   size?: "full" | "page";
   align?: "center" | "left";
@@ -29,6 +31,7 @@ export default function CinematicHero({
   image,
   fallbackClassName,
   children,
+  scene,
   size = "full",
   align = "center",
 }: Props) {
@@ -50,7 +53,7 @@ export default function CinematicHero({
     <section
       className={`relative flex ${minH} grain overflow-hidden ${alignment}`}
     >
-      {/* parallax media layer */}
+      {/* parallax media layer (CSS/gradient/photo fallback) */}
       <motion.div style={{ y }} className="absolute inset-0">
         <MediaBackground
           video={video}
@@ -59,12 +62,20 @@ export default function CinematicHero({
         />
       </motion.div>
 
-      <SmokeOverlay intensity={0.55} />
+      {/* optional live 3D layer on top of the fallback */}
+      {scene && <div className="absolute inset-0">{scene}</div>}
 
-      {/* vignette + bottom fade for legibility */}
+      <SmokeOverlay intensity={scene ? 0.3 : 0.55} />
+
+      {/* vignette + bottom fade for legibility. With a live 3D scene, fade
+          mainly from the left so hero text stays readable over the bottle. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_30%,transparent_30%,rgba(13,10,7,0.85)_100%)]"
+        className={
+          scene
+            ? "absolute inset-0 bg-[linear-gradient(90deg,rgba(13,10,7,0.92)_0%,rgba(13,10,7,0.55)_42%,transparent_72%)]"
+            : "absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_30%,transparent_30%,rgba(13,10,7,0.85)_100%)]"
+        }
       />
       <div
         aria-hidden

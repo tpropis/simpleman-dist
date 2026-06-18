@@ -7,5 +7,7 @@ export default defineConfig({
   build: {
     target: "es2020",
     cssCodeSplit: true,
+    // The WebGL hero chunk is intentionally large and lazy-loaded.
+    chunkSizeWarningLimit: 1000,
   },
 });
