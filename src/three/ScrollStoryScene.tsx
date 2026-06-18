@@ -7,6 +7,7 @@ import {
   Lightformer,
   Sparkles,
   ContactShadows,
+  MeshTransmissionMaterial,
 } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import Bottle from "./Bottle";
@@ -105,6 +106,106 @@ function CopperStill({ progress }: { progress: MutableRefObject<number> }) {
   );
 }
 
+/** Swaying grain field that reveals during the "Field" act (p ≈ 0.12). */
+function GrainField({ progress }: { progress: MutableRefObject<number> }) {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const count = 150;
+  const blades = useMemo(
+    () =>
+      Array.from({ length: count }, () => ({
+        x: (Math.random() - 0.5) * 8,
+        z: -1.2 - Math.random() * 3.5,
+        h: 0.35 + Math.random() * 0.6,
+        phase: Math.random() * Math.PI * 2,
+        lean: (Math.random() - 0.5) * 0.25,
+      })),
+    []
+  );
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  useFrame((state) => {
+    const grp = ref.current;
+    if (!grp) return;
+    const reveal = Math.max(0, 1 - Math.abs(progress.current - 0.12) / 0.16);
+    grp.visible = reveal > 0.02;
+    if (!grp.visible) return;
+    const t = state.clock.elapsedTime;
+    for (let i = 0; i < count; i++) {
+      const b = blades[i];
+      dummy.position.set(b.x, -1.7, b.z);
+      const sway = Math.sin(t * 1.3 + b.phase) * 0.13;
+      dummy.rotation.set(sway + b.lean, b.phase, Math.cos(t + b.phase) * 0.08);
+      dummy.scale.set(1, Math.max(0.001, b.h * reveal), 1);
+      dummy.updateMatrix();
+      grp.setMatrixAt(i, dummy.matrix);
+    }
+    grp.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh
+      ref={ref}
+      args={[undefined as unknown as THREE.BufferGeometry, undefined as unknown as THREE.Material, count]}
+    >
+      <cylinderGeometry args={[0.004, 0.022, 1, 4]} />
+      <meshStandardMaterial color="#b89a4a" roughness={0.85} metalness={0} />
+    </instancedMesh>
+  );
+}
+
+/** A rocks glass with amber pour + ice, revealing during the "Glass" act. */
+function CocktailGlass({ progress }: { progress: MutableRefObject<number> }) {
+  const g = useRef<THREE.Group>(null);
+  const profile = useMemo(
+    () =>
+      [
+        [0.0, 0.0],
+        [0.32, 0.0],
+        [0.33, 0.62],
+        [0.3, 0.62],
+        [0.29, 0.07],
+        [0.0, 0.07],
+      ].map(([x, y]) => new THREE.Vector2(x, y)),
+    []
+  );
+
+  useFrame(() => {
+    if (!g.current) return;
+    const reveal = Math.max(0, 1 - Math.abs(progress.current - 0.86) / 0.16);
+    const s = THREE.MathUtils.lerp(g.current.scale.x, reveal, 0.12);
+    g.current.scale.setScalar(s);
+    g.current.visible = s > 0.02;
+  });
+
+  return (
+    <group ref={g} position={[1.75, -1.2, 0.4]} scale={0.001}>
+      <mesh>
+        <latheGeometry args={[profile, 48]} />
+        <MeshTransmissionMaterial
+          transmission={1}
+          thickness={0.25}
+          roughness={0.05}
+          ior={1.46}
+          chromaticAberration={0.03}
+          color="#f4eee2"
+          samples={4}
+          resolution={256}
+        />
+      </mesh>
+      {/* amber pour */}
+      <mesh position={[0, 0.22, 0]}>
+        <cylinderGeometry args={[0.28, 0.28, 0.32, 40]} />
+        <meshPhysicalMaterial color="#b9652c" roughness={0.2} transmission={0.5} ior={1.34} transparent opacity={0.95} />
+      </mesh>
+      {/* ice */}
+      <mesh position={[0.04, 0.34, 0]} rotation={[0.5, 0.4, 0.2]}>
+        <boxGeometry args={[0.16, 0.16, 0.16]} />
+        <meshPhysicalMaterial color="#eaf2f4" roughness={0.1} transmission={0.85} ior={1.31} thickness={0.3} transparent opacity={0.85} />
+      </mesh>
+    </group>
+  );
+}
+
 interface Props {
   progress: MutableRefObject<number>;
   reduced?: boolean;
@@ -160,6 +261,8 @@ export default function ScrollStoryScene({ progress, reduced = false }: Props) {
       </group>
 
       <CopperStill progress={progress} />
+      {!reduced && <GrainField progress={progress} />}
+      <CocktailGlass progress={progress} />
 
       {!reduced && (
         <Sparkles

@@ -4,6 +4,7 @@ import {
   Lightformer,
   Sparkles,
   ContactShadows,
+  MeshReflectorMaterial,
 } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import Bottle from "./Bottle";
@@ -46,9 +47,29 @@ export default function HeroScene({ reduced = false }: { reduced?: boolean }) {
         />
       )}
 
+      {/* reflective floor for a polished bottle reflection */}
+      {!reduced && (
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[offsetX, -1.78, 0]}>
+          <planeGeometry args={[24, 24]} />
+          <MeshReflectorMaterial
+            resolution={256}
+            mixBlur={1}
+            mixStrength={2.2}
+            blur={[260, 90]}
+            roughness={0.95}
+            depthScale={1.1}
+            minDepthThreshold={0.3}
+            maxDepthThreshold={1.2}
+            color="#0d0a07"
+            metalness={0.55}
+            mirror={0.4}
+          />
+        </mesh>
+      )}
+
       <ContactShadows
-        position={[0, -1.75, 0]}
-        opacity={0.55}
+        position={[offsetX, -1.75, 0]}
+        opacity={0.5}
         scale={9}
         blur={2.6}
         far={4}
