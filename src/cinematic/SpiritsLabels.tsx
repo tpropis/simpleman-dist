@@ -39,7 +39,7 @@ export default function SpiritsLabels() {
           <div className="mt-7 flex items-center gap-4">
             <Link
               to="/where-to-buy"
-              className="rounded-full border border-gold-light/40 bg-gradient-to-b from-gold-light to-copper px-6 py-3 text-xs font-semibold uppercase tracking-widest2 text-charcoal-900 transition-all hover:-translate-y-0.5"
+              className="gradient-ember rounded-sm px-6 py-3 text-xs font-semibold uppercase tracking-widest2 text-charcoal-900 transition hover:brightness-110"
             >
               Find Near You
             </Link>

@@ -2,13 +2,11 @@ import { useStore } from "./store";
 import { PROCESS_STEPS } from "./layout";
 import Reveal from "./Reveal";
 
-const STEP_IMAGE: Record<string, string> = {
-  field: "/images/farm/field.jpg",
-  still: "/images/distillery/still.jpg",
-  glass: "/images/bar/cocktail-pour.jpg",
-};
-
-/** Sticky overlay for the Field → Still → Glass section, scrubbed by scroll. */
+/**
+ * Sticky text overlay for the Field → Still → Glass section. The 3D stage
+ * carries the visuals (grain field, copper still, glass) so this stays clean
+ * type — and avoids leaning on any low-res photography.
+ */
 export default function ProcessLabels() {
   const n = PROCESS_STEPS.length;
   const idx = useStore((s) =>
@@ -18,42 +16,26 @@ export default function ProcessLabels() {
 
   return (
     <div className="sticky top-0 flex h-screen items-center">
-      <div className="container-tight grid w-full items-center gap-8 px-5 sm:px-8 md:grid-cols-2">
-        <div className="hidden md:block">
-          <div key={step.key} className="relative aspect-[4/5] max-h-[30rem] overflow-hidden rounded-3xl glass">
-            <Reveal as="div" className="block h-full w-full">
-              <img
-                src={STEP_IMAGE[step.key]}
-                alt=""
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            </Reveal>
-            <span className="absolute left-5 top-5 rounded-full bg-charcoal-900/70 px-3 py-1 text-[10px] uppercase tracking-widest2 text-gold-light">
-              {step.label}
-            </span>
-          </div>
-        </div>
-
-        <div>
+      <div className="container-tight px-5 sm:px-8">
+        <div className="max-w-md">
           <p className="eyebrow">From field, to still, to glass</p>
           <div key={step.key}>
-            <Reveal as="span" className="mt-4 block font-display text-7xl font-bold text-gradient-gold">
+            <Reveal as="span" className="mt-3 block font-display text-7xl text-gradient-ember">
               {step.n}
             </Reveal>
-            <Reveal as="h2" delay={60} className="mt-2 block font-display text-3xl font-semibold sm:text-4xl">
+            <Reveal as="h2" delay={60} className="mt-2 block text-4xl text-cream sm:text-5xl">
               {step.title}
             </Reveal>
-            <Reveal as="p" delay={120} className="mt-4 block max-w-md text-cream-dim">
+            <Reveal as="p" delay={120} className="mt-5 block text-lg leading-relaxed text-muted-foreground">
               {step.body}
             </Reveal>
           </div>
-          <div className="mt-7 flex gap-2">
+          <div className="mt-8 flex gap-2">
             {PROCESS_STEPS.map((s, i) => (
               <span
                 key={s.key}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === idx ? "w-8 bg-gold-light" : "w-2 bg-cream/25"
+                  i === idx ? "w-8 bg-gold" : "w-2 bg-cream/25"
                 }`}
               />
             ))}

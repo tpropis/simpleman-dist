@@ -54,13 +54,13 @@ export default function HeroOverlay() {
       >
         <Link
           to="/spirits"
-          className="rounded-full border border-gold-light/40 bg-gradient-to-b from-gold-light to-copper px-7 py-3.5 text-sm font-semibold uppercase tracking-widest2 text-charcoal-900 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+          className="gradient-ember rounded-sm px-7 py-3.5 text-sm font-semibold uppercase tracking-widest2 text-charcoal-900 transition hover:brightness-110"
         >
           Explore Spirits
         </Link>
         <a
           href="#section-bar"
-          className="rounded-full px-7 py-3.5 text-sm font-medium uppercase tracking-widest2 text-cream-dim transition-colors hover:text-gold-light"
+          className="rounded-sm border border-border px-7 py-3.5 text-sm font-semibold uppercase tracking-widest2 text-cream transition hover:border-copper hover:text-gold"
         >
           Visit the Bar →
         </a>
